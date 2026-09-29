@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Site Express — sua página de vendas em até 24h</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@500;700;800&family=Funnel+Sans:wght@400;500;600&family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#130A24;
+    --bg-2:#1C1030;
+    --acid:#A66CFF;
+    --text:#ffffff;
+    --text-dim:rgba(255,255,255,.62);
+    --line:rgba(166,108,255,.20);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:'Funnel Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){ }
+  }
+  .wrap{ max-width:640px; margin:0 auto; padding:0 22px; }
+
+  .mono{
+    font-family:'Anonymous Pro', monospace;
+    letter-spacing:.06em;
+  }
+
+  /* topo */
+  header{
+    padding:26px 0 8px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo{ font-family:'Funnel Display', sans-serif; font-weight:800; font-size:17px; }
+  .logo span{ color:var(--acid); }
+  .handle{ font-size:12px; color:var(--text-dim); }
+
+  /* hero */
+  .hero{ padding:34px 0 30px; border-bottom:1px solid var(--line); }
+  .eyebrow{
+    display:inline-block; font-size:12px; color:var(--acid);
+    border:1px solid var(--acid); border-radius:999px;
+    padding:5px 12px; margin-bottom:20px;
+  }
+  h1{
+    font-family:'Funnel Display', sans-serif; font-weight:800;
+    font-size:clamp(32px,8vw,46px); line-height:1.08; margin:0 0 16px;
+  }
+  h1 em{ color:var(--acid); font-style:normal; }
+  .lead{ font-size:17px; line-height:1.55; color:var(--text-dim); margin:0 0 28px; max-width:46ch; }
+
+  .price-row{
+    display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap;
+    margin-bottom:24px;
+  }
+  .price{
+    font-family:'Funnel Display', sans-serif; font-weight:800;
+    font-size:56px; line-height:1; color:var(--acid);
+  }
+  .price-meta{ font-size:14px; color:var(--text-dim); padding-bottom:8px; }
+
+  .btn{
+    display:block; width:100%; text-align:center;
+    font-family:'Funnel Sans', sans-serif; font-weight:700; font-size:16px;
+    color:var(--bg); background:var(--acid);
+    border:none; border-radius:12px; padding:17px 20px;
+    text-decoration:none; cursor:pointer;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .btn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+  .btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+  .btn-note{ text-align:center; font-size:12.5px; color:var(--text-dim); margin-top:10px; }
+
+  .btn-outline{
+    display:block; width:100%; text-align:center;
+    font-family:'Funnel Sans', sans-serif; font-weight:600; font-size:15px;
+    color:var(--text); background:transparent;
+    border:1px solid var(--line); border-radius:12px; padding:15px 20px;
+    text-decoration:none; cursor:pointer;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .btn-outline:hover{ border-color:var(--acid); background:rgba(212,255,61,.06); }
+  .btn-outline:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+
+  .portfolio-row{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    flex-wrap:wrap;
+  }
+  .portfolio-text{ flex:1 1 220px; }
+  .portfolio-text p{ margin:0; font-size:14.5px; color:var(--text-dim); line-height:1.5; }
+  .portfolio-cta{ flex:0 0 auto; width:auto; min-width:200px; }
+  @media (max-width:480px){
+    .portfolio-cta{ width:100%; }
+  }
+
+  /* seções */
+  section{ padding:30px 0; border-bottom:1px solid var(--line); }
+  h2{
+    font-family:'Funnel Display', sans-serif; font-weight:700;
+    font-size:20px; margin:0 0 18px;
+  }
+
+  .list{ list-style:none; margin:0; padding:0; }
+  .list li{
+    display:flex; gap:12px; align-items:flex-start;
+    font-size:15px; line-height:1.5; color:var(--text);
+    padding:9px 0;
+  }
+  .list li::before{
+    content:"✓"; color:var(--acid); font-weight:700; flex:0 0 auto;
+    font-family:'Anonymous Pro', monospace;
+  }
+
+  .list.no li{ color:var(--text-dim); }
+  .list.no li::before{ content:"✕"; color:var(--text-dim); }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; }
+  .steps li{
+    counter-increment:step;
+    display:grid; grid-template-columns:34px 1fr; gap:14px;
+    padding:12px 0;
+    font-size:15px;
+  }
+  .steps li:not(:last-child){ border-bottom:1px dashed var(--line); }
+  .steps li::before{
+    content:counter(step);
+    font-family:'Anonymous Pro', monospace; font-weight:700;
+    color:var(--acid);
+    border:1px solid var(--line); border-radius:8px;
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    font-size:13px;
+  }
+
+  .final{ padding:38px 0 44px; text-align:center; }
+  .final h2{ font-size:24px; margin-bottom:10px; }
+  .final p{ color:var(--text-dim); font-size:15px; margin-bottom:24px; }
+
+  footer{
+    padding:24px 0 40px; text-align:center;
+    font-size:12.5px; color:var(--text-dim);
+  }
+  footer a{ color:var(--acid); text-decoration:none; }
+
+  /* portfólio */
+  .portfolio{
+    padding:30px 0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .portfolio-grid{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:18px;
+  }
+
+  .portfolio-card{
+    display:block;
+    color:var(--text);
+    text-decoration:none;
+    min-width:0;
+  }
+
+  .portfolio-image{
+    position:relative;
+    aspect-ratio:16 / 9;
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--bg-2);
+  }
+
+  .portfolio-image::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border:1px solid rgba(166,108,255,.18);
+    border-radius:12px;
+    pointer-events:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .portfolio-image img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .18s ease, filter .18s ease;
+  }
+
+  .portfolio-card:hover .portfolio-image img{
+    transform:scale(1.025);
+    filter:brightness(1.06);
+  }
+
+  .portfolio-card:hover .portfolio-image::after{
+    border-color:var(--acid);
+    box-shadow:0 0 0 1px rgba(166,108,255,.18);
+  }
+
+  .portfolio-card-meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 2px 2px;
+    font-size:14px;
+    line-height:1.3;
+  }
+
+  .portfolio-card-meta .mono{
+    color:var(--acid);
+    font-size:15px;
+  }
+
+  .portfolio-note{
+    padding:34px 0 38px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .portfolio-note h2{
+    margin-bottom:8px;
+  }
+
+  .portfolio-note p{
+    color:var(--text-dim);
+    font-size:15px;
+    line-height:1.5;
+    margin:0 0 22px;
+    max-width:48ch;
+  }
+
+  @media (max-width:560px){
+    .portfolio-grid{
+      grid-template-columns:1fr;
+      gap:22px;
+    }
+
+    .portfolio-card-meta{
+      padding-top:9px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="logo">site<span>express</span></div>
+    <div class="handle mono">@sites_express_</div>
+  </header>
+
+  <section class="hero">
+    <span class="eyebrow mono">PORTFÓLIO</span>
+    <h1>Páginas que colocam sua <em>oferta</em> no lugar certo.</h1>
+    <p class="lead">Uma seleção de páginas criadas pelo Site Express para diferentes prestadores de serviço. Clique em uma delas para conhecer a página completa.</p>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-grid">
+
+      <!--
+        CARD — copie este bloco para adicionar um novo projeto.
+
+        Altere somente:
+        1. href = link do site
+        2. src  = caminho da imagem dentro da pasta fotos/
+        3. nome do projeto
+
+        Estrutura sugerida:
+        /portfolio.html
+        /fotos/
+          projeto-01.webp
+          projeto-02.webp
+          projeto-03.webp
+      -->
+
+      <a class="portfolio-card" href="https://jacquelinecosta.vercel.app/" target="_blank" rel="noopener">
+        <div class="portfolio-image">
+          <img src="fotos/jacqueline.jpg" alt="Jacqueline Costa — Massoterapia">
+        </div>
+        <div class="portfolio-card-meta">
+          <span>Jacqueline Costa — Massoterapia</span>
+          <span class="mono">↗</span>
+        </div>
+      </a>
+
+      <a class="portfolio-card" href="https://lucas-six-phi.vercel.app/" target="_blank" rel="noopener">
+        <div class="portfolio-image">
+          <img src="fotos/lucas.jpg" alt="Lucas Ferraz — Performance">
+        </div>
+        <div class="portfolio-card-meta">
+          <span>Lucas Ferraz — Performance</span>
+          <span class="mono">↗</span>
+        </div>
+      </a>
+
+      <a class="portfolio-card" href="https://almeida-torres.vercel.app/" target="_blank" rel="noopener">
+        <div class="portfolio-image">
+          <img src="fotos/almeida.jpg" alt="Almeida & Torres — Advocacia Empresarial">
+        </div>
+        <div class="portfolio-card-meta">
+          <span>Almeida & Torres — Advocacia Empresarial</span>
+          <span class="mono">↗</span>
+        </div>
+      </a>
+
+      <a class="portfolio-card" href="https://rafaeltorres-three.vercel.app/" target="_blank" rel="noopener">
+        <div class="portfolio-image">
+          <img src="fotos/rafael.jpg" alt="Rafael Monteiro — Direito de Família">
+        </div>
+        <div class="portfolio-card-meta">
+          <span>Rafael Monteiro — Direito de Família</span>
+          <span class="mono">↗</span>
+        </div>
+      </a>
+
+      <!-- FIM DOS CARDS -->
+
+    </div>
+  </section>
+
+  <section class="portfolio-note">
+    <h2>Gostou de alguma?</h2>
+    <p>As páginas são feitas para apresentar sua oferta com clareza e levar seu cliente ao próximo passo.</p>
+    <a class="btn" href="https://wa.me/5531999107539?text=Ol%C3%A1%21%20Vi%20o%20portf%C3%B3lio%20do%20Site%20Express%20e%20quero%20criar%20minha%20p%C3%A1gina." target="_blank" rel="noopener">Quero minha página</a>
+  </section>
+
+  <footer>
+    site express · <a href="https://instagram.com/sites_express_" target="_blank" rel="noopener">@sites_express_</a>
+  </footer>
+
+</div>
+
+</body>
+</html>
